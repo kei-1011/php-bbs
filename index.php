@@ -63,12 +63,28 @@ if (!empty($_POST['btn_submit'])) {
 }
 
 if ($file_handle = fopen(FILENAME, 'r')) {
-  while ($data = fgets($file_handle)) {
+  while ($data = fgets($file_handle)) {   //ファイルから1行ずつデータを取り出す
 
     $split_data = preg_split('/\'/', $data);
-    //preg_split関数は文字列を特定の文字で分割する関数
+    //preg_split関数は文字列を特定の文字で分割する関数「'」で分割
 
+    print_r($split_data);
+    /*$split_dataの中身
+    結果
+    Array
+    (
+        [0] =>
+        [1] => テスト
+        [2] => ,
+        [3] => POSTのデータ受け取りテスト
+        [4] => ,
+        [5] => 2020-01-31 07:09:52
+        [6] =>
 
+    )
+    */
+
+    // 一旦messageに入れる
     $message = array(
       'view_name' => $split_data[1],
       'message' => $split_data[3],
@@ -97,6 +113,11 @@ if ($file_handle = fopen(FILENAME, 'r')) {
   <section>
     <?php if (!empty($message_array)) : ?>
       <?php foreach ($message_array as $value) : ?>
+        <!-- foreach文で$message_arrayからメッセージ1件分のデータを取り出し、$valueに入れた -->
+
+        <!-- 表示名、投稿日時、メッセージ内容の3つをそれぞれecho関数で出力 -->
+
+
         <article>
           <div class="info">
             <h2><?php echo $value['view_name']; ?></h2>
