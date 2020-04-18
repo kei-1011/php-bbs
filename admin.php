@@ -98,7 +98,12 @@ if ($mysqli->connect_errno) {
   //ログインセッションの存在チェック
   ?>
 <form action="./download.php">
-    <input type="submit" name="btn_download" value="ダウンロード">
+  <select name="limit">
+    <option value=""></option>
+    <option value="10">10件</option>
+    <option value="30">30件</option>
+  </select>
+  <input type="submit" name="btn_download" value="ダウンロード">
 </form>
     <?php if (!empty($message_array)) : ?>
       <?php foreach ($message_array as $value) : ?>

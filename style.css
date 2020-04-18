@@ -43,6 +43,8 @@ hr {
 input,
 select {
   vertical-align: middle;
+  background-color: #fff;
+  box-shadow: 1px 1px 4px #ccc;
 }
 
 /*------------------------------
