@@ -62,12 +62,12 @@ if (!empty($_POST['btn_submit'])) {
   //エラーがなければ書き込みを実行
   if( empty($error_message) ){
 
+    /*
     if ($file_handle = fopen(FILENAME, "a")) {
-      /*fopenでファイルを開く
+      fopenでファイルを開く
       1：ファイル名を含めたパス
       2：モード　読み込みだけを行う「r」、書き込みを行う「w」や「a」などが
         「w」はファイル内容を一旦リセットして書き込みを行い、「a」は末端から追記する形で書き込みを行う
-      */
 
       //書き込み日時を取得
       //サーバーでで世界標準時間になっている場合があるため
@@ -84,6 +84,37 @@ if (!empty($_POST['btn_submit'])) {
       fclose($file_handle);
 
       $success_message = "メッセージを書き込みました";
+    }
+  */
+
+    // データベースに接続
+    $mysqli = new mysqli('localhost', 'root', 'root', 'php_bbs');
+
+    // 接続エラーの確認
+    if ($mysqli->connect_errno) {
+      $error_message[] = '書き込みに失敗しました。 エラー番号 ' . $mysqli->connect_errno . ' : ' . $mysqli->connect_error;
+    } else {
+
+      // 文字コード設定
+      $mysqli->set_charset('utf8');
+
+      // 書き込み日時を取得
+      $now_date = date("Y-m-d H:i:s");
+
+      // データを登録するSQL作成
+      $sql = "INSERT INTO message (view_name, message, post_date) VALUES ( '$clean[view_name]', '$clean[message]', '$now_date')";
+
+      // データを登録
+      $res = $mysqli->query($sql);
+
+      if ($res) {
+        $success_message = 'メッセージを書き込みました。';
+      } else {
+        $error_message[] = '書き込みに失敗しました。';
+      }
+
+      // データベースの接続を閉じる
+      $mysqli->close();
     }
   }
 }
