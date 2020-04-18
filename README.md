@@ -36,6 +36,8 @@ PHPの基礎学習のためのアウトプット
 ## テキストファイルから書き込む
 
 ```php
+//メッセージを保存するファイルのパスを指定
+define('FILENAME', './message.txt');
 
 //テキストファイルからの読み込み
 if ($file_handle = fopen(FILENAME, 'r')) {

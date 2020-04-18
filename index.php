@@ -10,36 +10,37 @@
 <body>
 <?php
 
-//メッセージを保存するファイルのパスを指定
-define('FILENAME', './message.txt');
+//DB接続情報を定数に格納
+define('DB_HOST','localhost');
+define('DB_USER','root');
+define('DB_PASS','root');
+define('DB_NAME','php_bbs');
 
 //タイムゾーン設定
 date_default_timezone_set('Asia/Tokyo');
 
-$now_date     = null;
-$data         = null;
-$fule_handle  = null;
-
-$split_data   = null;
-$message      = array();
-$message_array = array();
-$success_message = null;
-$error_message = null;
-$clean = array();
-
-/*変数の初期化
+/*  変数リセット
 変数をあらかじめ「null」など空の値で宣言しておく
 存在しない変数を参照するエラーを防ぎ
 型をあらかじめ設定しておくことで意図しない動作を防ぐ
 */
+$now_date         = null;
+$data             = null;
+$file_handle      = null;
+$split_data       = null;
+$message          = array();
+$message_array    = array();
+$success_message  = null;
+$error_message    = null;
+$clean            = array();
 
-/*入力データの受け渡しの有無を調べる
-メッセージを書き込むのか、掲示板を表示するのか判断する
-フォームで入力したデータは$_POSTに代入されるので、データがあるかを確認することで入力データの受け渡しがあるかを判断できる
+// セッションの使用開始
+session_start();
+
+/*  送信ボタンが押された時の処理
+バリデーションチェック
+エラーがなければDB書き込み
 */
-//
-
-//テキストファイルへの書き込み
 if (!empty($_POST['btn_submit'])) {
 
   //バリデーション
@@ -47,6 +48,9 @@ if (!empty($_POST['btn_submit'])) {
     $error_message[] = "表示名を入力してください";
   } else {
     $clean['view_name'] = htmlspecialchars($_POST['view_name'],ENT_QUOTES);
+
+    //セッションに表示名を保存
+    $_SESSION['view_name'] = $clean['view_name'];
     $clean['view_name'] = preg_replace('/\\r\\n|\\n|\\r/', '', $clean['view_name']);  //改行コードがあれば削除
   }
 
@@ -63,7 +67,7 @@ if (!empty($_POST['btn_submit'])) {
   if( empty($error_message) ){
 
     // データベースに接続
-    $mysqli = new mysqli('localhost', 'root', 'root', 'php_bbs');
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
     // 接続エラーの確認
     if ($mysqli->connect_errno) {
@@ -96,7 +100,7 @@ if (!empty($_POST['btn_submit'])) {
 
 
 // データベースに接続
-$mysqli = new mysqli('localhost', 'root', 'root', 'php_bbs');
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // 接続エラーの確認
 if ($mysqli->connect_errno) {
@@ -106,7 +110,8 @@ if ($mysqli->connect_errno) {
 
   $sql = "SELECT view_name,message,post_date FROM message ORDER BY post_date DESC";
   /* - 基本的な文法 -
-  SELECT 取得するカラム名 FROM テーブル名 WHERE 取得条件 ORDER BY ソートするカラム名 DESC */
+  SELECT 取得するカラム名 FROM テーブル名 WHERE 取得条件 ORDER BY ソートするカラム名 DESC
+  */
 
   $res = $mysqli->query($sql);  // queryメソッドで実行
 
@@ -138,7 +143,7 @@ if ($mysqli->connect_errno) {
   <form method="post">
     <div>
       <label for="view_name">表示名</label>
-      <input id="view_name" type="text" name="view_name" value="">
+      <input id="view_name" type="text" name="view_name" value="<?php if(!empty($_SESSION['view_name'])) { echo $_SESSION['view_name'];}?>">
     </div>
     <div>
       <label for="message">ひと言メッセージ</label>
