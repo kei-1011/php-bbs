@@ -97,7 +97,9 @@ if ($mysqli->connect_errno) {
   <?php if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true) :
   //ログインセッションの存在チェック
   ?>
-
+<form action="./download.php">
+    <input type="submit" name="btn_download" value="ダウンロード">
+</form>
     <?php if (!empty($message_array)) : ?>
       <?php foreach ($message_array as $value) : ?>
         <article>
