@@ -200,7 +200,11 @@ article.reply::before {
   line-height: 1.6em;
   font-size: 72%;
 }
-
+.info p {
+  display: inline-block;
+  line-height: 1.6em;
+  font-size: 86%;
+}
 article p {
   color: #555;
   font-size: 86%;
@@ -222,4 +226,22 @@ article p {
     max-width: 100%;
     height: 70px;
   }
+}
+
+
+/*  管理画面
+---------------------------------------*/
+.btn_cancel {
+	display: inline-block;
+	margin-right: 10px;
+	padding: 10px 20px;
+	color: #555;
+	font-size: 86%;
+	border-radius: 5px;
+	border: 1px solid #999;
+}
+.btn_cancel:hover {
+	color: #999;
+	border-color: #999;
+	text-decoration: none;
 }

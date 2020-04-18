@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-  <meta charset="utf-8">
-  <title>ひと言掲示板　管理ページ</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
 <?php
 
 //管理ページのログインパスワード
@@ -64,7 +54,7 @@ if ($mysqli->connect_errno) {
 } else {
   // 書き込み処理
 
-  $sql = "SELECT view_name,message,post_date FROM message ORDER BY post_date DESC";
+  $sql = "SELECT id,view_name,message,post_date FROM message ORDER BY post_date DESC";
   /* - 基本的な文法 -
   SELECT 取得するカラム名 FROM テーブル名 WHERE 取得条件 ORDER BY ソートするカラム名 DESC
   */
@@ -84,6 +74,14 @@ if ($mysqli->connect_errno) {
   $mysqli->close();
 }
 ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ひと言掲示板　管理ページ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
   <h1>ひと言掲示板 管理ページ</h1>
   <?php if(!empty($error_message) ) :?>
     <ul class="error_message">
@@ -111,6 +109,7 @@ if ($mysqli->connect_errno) {
           <div class="info">
             <h2><?php echo $value['view_name']; ?></h2>
             <time><?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])); ?></time>
+            <p><a href="edit.php?message_id=<?php echo $value['id']; ?>">編集</a>  <a href="delete.php?message_id=<?php echo $value['id']; ?>">削除</a></p>
           </div>
           <p><?php echo $value['message']; ?></p>
         </article>

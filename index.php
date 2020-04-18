@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-  <meta charset="utf-8">
-  <title>ひと言掲示板</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
 <?php
 
 //DB接続情報を定数に格納
@@ -128,6 +118,14 @@ if ($mysqli->connect_errno) {
   $mysqli->close();
 }
 ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ひと言掲示板</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
   <h1>ひと言掲示板</h1>
   <?php if(!empty($success_message) ) :?>
     <p class="success_message"><?php echo $success_message; ?></p>
