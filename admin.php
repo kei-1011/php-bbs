@@ -94,12 +94,12 @@ if ($mysqli->connect_errno) {
   <?php endif;?>
 
   <section>
-  <?php if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true) :?>
+  <?php if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true) :
+  //ログインセッションの存在チェック
+  ?>
 
     <?php if (!empty($message_array)) : ?>
       <?php foreach ($message_array as $value) : ?>
-        <!-- foreach文で$message_arrayからメッセージ1件分のデータを取り出し、$valueに入れた -->
-        <!-- 表示名、投稿日時、メッセージ内容の3つをそれぞれecho関数で出力 -->
         <article>
           <div class="info">
             <h2><?php echo $value['view_name']; ?></h2>
@@ -109,7 +109,7 @@ if ($mysqli->connect_errno) {
         </article>
       <?php endforeach; ?>
     <?php endif; ?>
-  <?php else:?>
+  <?php else: //ログインフォーム?>
   <form method="post">
     <div>
       <label for="admin_password">ログインパスワード</label>
