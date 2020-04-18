@@ -10,6 +10,9 @@
 <body>
 <?php
 
+//管理ページのログインパスワード
+define('PASSWORD','admin');
+
 //DB接続情報を定数に格納
 define('DB_HOST','localhost');
 define('DB_USER','root');
@@ -42,6 +45,13 @@ session_start();
 エラーがなければDB書き込み
 */
 if (!empty($_POST['btn_submit'])) {
+
+  //ログイン判定
+  if(!empty($_POST['admin_password']) && $_POST['admin_password'] === PASSWORD) {
+    $_SESSION['admin_login'] = true;
+  } else {
+    $error_message[] = 'ログインに失敗しました';
+  }
 }
 
 
@@ -84,6 +94,8 @@ if ($mysqli->connect_errno) {
   <?php endif;?>
 
   <section>
+  <?php if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true) :?>
+
     <?php if (!empty($message_array)) : ?>
       <?php foreach ($message_array as $value) : ?>
         <!-- foreach文で$message_arrayからメッセージ1件分のデータを取り出し、$valueに入れた -->
@@ -96,6 +108,16 @@ if ($mysqli->connect_errno) {
           <p><?php echo $value['message']; ?></p>
         </article>
       <?php endforeach; ?>
-    <?php endif; ?> </section>
+    <?php endif; ?>
+  <?php else:?>
+  <form method="post">
+    <div>
+      <label for="admin_password">ログインパスワード</label>
+      <input id="admin_password" name="admin_password" type="password" value="">
+    </div>
+    <input type="submit" name="btn_submit" value="ログイン">
+  </form>
+  <?php endif;?>
+  </section>
 </body>
 </html>

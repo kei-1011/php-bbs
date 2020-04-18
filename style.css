@@ -84,6 +84,7 @@ label {
 }
 
 input[type="text"],
+input[type="password"],
 textarea {
   margin-bottom: 20px;
   padding: 10px;
@@ -93,6 +94,7 @@ textarea {
   background: #fff;
 }
 
+input[type="password"],
 input[type="text"] {
   width: 200px;
 }
