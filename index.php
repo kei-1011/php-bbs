@@ -25,6 +25,8 @@ $message      = array();
 $message_array = array();
 $success_message = null;
 $error_message = null;
+$clean = array();
+
 /*変数の初期化
 変数をあらかじめ「null」など空の値で宣言しておく
 存在しない変数を参照するエラーを防ぎ
@@ -43,10 +45,19 @@ if (!empty($_POST['btn_submit'])) {
   //バリデーション
   if(empty($_POST['view_name'])) {
     $error_message[] = "表示名を入力してください";
+  } else {
+    $clean['view_name'] = htmlspecialchars($_POST['view_name'],ENT_QUOTES);
+    $clean['view_name'] = preg_replace('/\\r\\n|\\n|\\r/', '', $clean['view_name']);  //改行コードがあれば削除
   }
+
   if(empty($_POST['message'])) {
     $error_message[] = "ひと言メッセージを入力してください";
+  } else {
+    $clean['message'] = htmlspecialchars($_POST['message'], ENT_QUOTES);
+    $clean['message'] = preg_replace('/\\r\\n|\\n|\\r/', '<br>', $clean['message']);  // 改行コードがあればbrに置き換え
   }
+//エラーがなければ、$cleanにHTMLエンティティ化して格納
+
 
   //エラーがなければ書き込みを実行
   if( empty($error_message) ){
@@ -64,7 +75,7 @@ if (!empty($_POST['btn_submit'])) {
 
       //書き込むデータを作成
       //「‘ (シングルクォーテーション)」で囲み、「表示名」「メッセージ」「投稿日時」をそれぞれ「, (コンマ)」で区切る
-      $data = "'" . $_POST['view_name'] . "','" . $_POST['message'] . "','" . $now_date . "'\n";
+      $data = "'" . $clean['view_name'] . "','" . $clean['message'] . "','" . $now_date . "'\n";
 
       //書き込み
       fwrite($file_handle, $data);
