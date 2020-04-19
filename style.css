@@ -245,3 +245,8 @@ article p {
 	border-color: #999;
 	text-decoration: none;
 }
+.text-confirm {
+	margin-bottom: 20px;
+	font-size: 86%;
+	line-height: 1.6em;
+}
