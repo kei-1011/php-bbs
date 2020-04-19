@@ -30,14 +30,18 @@ $clean            = array();
 // セッションの使用開始
 session_start();
 
-/*  送信ボタンが押された時の処理
-バリデーションチェック
-エラーがなければDB書き込み
+/*
+ログアウトボタンが押された場合の処理
+unsetでセッション変数に格納した値を削除
 */
-if (!empty($_POST['btn_submit'])) {
+if( !empty($_GET['btn_logout'])) {
+  unset($_SESSION['admin_login']);
+}
 
+if (!empty($_POST['btn_submit'])) {
   //ログイン判定
   if(!empty($_POST['admin_password']) && $_POST['admin_password'] === PASSWORD) {
+    //ログイン状態を判断
     $_SESSION['admin_login'] = true;
   } else {
     $error_message[] = 'ログインに失敗しました';
@@ -116,6 +120,10 @@ if ($mysqli->connect_errno) {
         </article>
       <?php endforeach; ?>
     <?php endif; ?>
+
+    <form action="" method="get">
+    <input type="submit" value="ログアウト" name="btn_logout">
+    </form>
   <?php else: //ログインフォーム?>
   <form method="post">
     <div>

@@ -250,3 +250,12 @@ article p {
 	font-size: 86%;
 	line-height: 1.6em;
 }
+
+
+input[name=btn_logout] {
+	margin-top: 40px;
+	background-color: #666;
+}
+input[name=btn_logout]:hover {
+	background-color: #777;
+}
