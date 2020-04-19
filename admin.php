@@ -111,7 +111,8 @@ if ($mysqli->connect_errno) {
             <time><?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])); ?></time>
             <p><a href="edit.php?message_id=<?php echo $value['id']; ?>">編集</a>  <a href="delete.php?message_id=<?php echo $value['id']; ?>">削除</a></p>
           </div>
-          <p><?php echo $value['message']; ?></p>
+          <p><?php echo nl2br($value['message']); ?></p>
+          <!-- nl2br  改行コードをHTMLのbr要素に置き換えて表示に反映-->
         </article>
       <?php endforeach; ?>
     <?php endif; ?>

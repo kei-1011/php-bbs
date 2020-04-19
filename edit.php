@@ -13,6 +13,12 @@ define('DB_NAME','php_bbs');
 date_default_timezone_set('Asia/Tokyo');
 
 /*  変数リセット */
+$message_id = null;
+$mysqli     = null;
+$sql        = null;
+$res        = null;
+$error_message = array();
+$message_data = array();
 
 session_start();
 
@@ -23,7 +29,8 @@ if(empty($_SESSION['admin_login']) || $_SESSION['admin_login'] !== true) {
 }
 
 //投稿IDを取得した場合
-if(!empty($_GET['message_id'])) {
+//POSTパラメータの有無で表示と更新を切り替える
+if(!empty($_GET['message_id']) && empty($_POST['message_id'])) {
   $message_id = (int)htmlspecialchars($_GET['message_id'],ENT_QUOTES);
   //GETで渡された投稿IDをHTMLエンティティ化して代入
   //この投稿IDを使って、データベースから投稿データを取り出す
@@ -47,6 +54,46 @@ if(!empty($_GET['message_id'])) {
     }
     $mysqli->close();
   }
+} elseif(!empty($_POST['message_id'])) {
+  // 編集内容を保存する処理
+
+  $message_id = (int)htmlspecialchars($_POST['message_id'],ENT_QUOTES);
+
+  if(empty($_POST['view_name'])) {
+    $error_message[] = "表示名を入力してください";
+  } else {
+    $message_data['view_name'] = htmlspecialchars($_POST['view_name'],ENT_QUOTES);
+  }
+  if(empty($_POST['message'])) {
+    $error_message[] = "ひと言メッセージを入力してください";
+  } else {
+    $message_data['message'] = htmlspecialchars($_POST['message'], ENT_QUOTES);
+  }
+
+  if(empty($error_message)) {
+    //DB保存処理
+
+    // データベースに接続
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+    // 接続エラーの確認
+    if ($mysqli->connect_errno) {
+      $error_message[] = '書き込みに失敗しました。 エラー番号 ' . $mysqli->connect_errno . ' : ' . $mysqli->connect_error;
+    } else {
+      $sql = "UPDATE message set view_name = '$message_data[view_name]', message = '$message_data[message]' WHERE id= $message_id";
+
+      $res = $mysqli->query($sql);
+    }
+
+    $mysqli->close();
+
+    //更新したら一覧に戻る
+    if($res) {
+      header("Location:./admin.php");
+    }
+  }
+
+
 }
 
 ?>
