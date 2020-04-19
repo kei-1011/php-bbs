@@ -20,7 +20,6 @@ $file_handle      = null;
 $split_data       = null;
 $message          = array();
 $message_array    = array();
-$success_message  = null;
 $error_message    = null;
 $clean            = array();
 
@@ -76,7 +75,7 @@ if (!empty($_POST['btn_submit'])) {
       $res = $mysqli->query($sql);
 
       if ($res) {
-        $success_message = 'メッセージを書き込みました。';
+        $_SESSION['success_message'] = 'メッセージを書き込みました。';
       } else {
         $error_message[] = '書き込みに失敗しました。';
       }
@@ -84,6 +83,7 @@ if (!empty($_POST['btn_submit'])) {
       // データベースの接続を閉じる
       $mysqli->close();
     }
+    header("Location:./");
   }
 }
 
@@ -126,9 +126,15 @@ if ($mysqli->connect_errno) {
 </head>
 <body>
   <h1>ひと言掲示板</h1>
-  <?php if(!empty($success_message) ) :?>
-    <p class="success_message"><?php echo $success_message; ?></p>
-  <?php endif;?>
+  <?php
+  /*
+  POSTパラメータの書き込みボタンが押されている
+  表示する成功メッセージがある
+  */
+  if( empty($_POST['btn_submit']) && !empty($_SESSION['success_message']) ): ?>
+    <p class="success_message"><?php echo $_SESSION['success_message']; ?></p>
+    <?php unset($_SESSION['success_message']); ?>
+  <?php endif; ?>
   <?php if(!empty($error_message) ) :?>
     <ul class="error_message">
     <?php foreach($error_message as $value):?>
@@ -162,6 +168,8 @@ if ($mysqli->connect_errno) {
           <p><?php echo nl2br($value['message']); ?></p>
         </article>
       <?php endforeach; ?>
-    <?php endif; ?> </section>
+    <?php endif; ?>
+  </section>
+    <a href="/admin.php" class="btn_login">管理画面ログイン</a>
 </body>
 </html>

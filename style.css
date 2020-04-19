@@ -228,6 +228,18 @@ article p {
   }
 }
 
+.btn_login {
+padding: 10px 20px;
+color: #fff;
+font-size: 86%;
+line-height: 1.0em;
+cursor: pointer;
+border: none;
+border-radius: 5px;
+background-color: #37a1e5;
+display: inline-block;
+margin-top: 20px;
+}
 
 /*  管理画面
 ---------------------------------------*/
